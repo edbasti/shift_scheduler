@@ -1,25 +1,29 @@
 <template>
-  <div class="space-y-6">
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">Welcome to Shift Scheduler</h2>
-      <p class="text-gray-600">
-        Your Nuxt application with Firebase and Tailwind CSS is ready!
-      </p>
-    </div>
-    
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-lg font-medium text-gray-900 mb-2">Firebase Status</h3>
-      <p class="text-sm text-gray-600">
-        Firebase is configured and ready to use. Make sure to set your Firebase configuration in the environment variables.
-      </p>
+  <div class="min-h-screen bg-gray-50">
+    <NavBar />
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-6">My Shifts</h1>
+      <div v-if="!user" class="text-center py-8">
+        <p class="text-gray-600">Loading...</p>
+      </div>
+      <ShiftsCalendar v-else-if="isEmployee" />
+      <ShiftsList v-else />
     </div>
   </div>
 </template>
 
-<script setup>
-// Example: Access Firebase services
-const { $auth, $db, $storage } = useNuxtApp()
+<script setup lang="ts">
+definePageMeta({
+  middleware: 'auth'
+})
 
-// You can use Firebase services here
-// Example: const user = await signInWithEmailAndPassword($auth, email, password)
+const { isEmployee, user } = useAuth()
+
+// Ensure user is loaded
+onMounted(async () => {
+  const { checkAuth } = useAuth()
+  if (!user.value) {
+    await checkAuth()
+  }
+})
 </script>
