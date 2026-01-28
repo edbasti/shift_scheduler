@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '~/composables/useAuth'
 const { user, logout, isAdmin } = useAuth()
 
 const handleLogout = async () => {

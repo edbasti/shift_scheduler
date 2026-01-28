@@ -1,5 +1,7 @@
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore'
 import type { Shift } from '~/types'
+import { useNuxtApp } from '#app'
+import { useAuth } from '~/composables/useAuth'
 
 export const useShifts = () => {
   const { $db } = useNuxtApp()
