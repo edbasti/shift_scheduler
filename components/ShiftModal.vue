@@ -115,6 +115,8 @@ import type { Shift, User } from '~/types'
 
 interface Props {
   shift?: Shift | null
+  initialStart?: Date | null
+  initialEnd?: Date | null
 }
 
 const props = defineProps<Props>()
@@ -159,10 +161,14 @@ const initializeForm = () => {
       notes: props.shift.notes || ''
     }
   } else {
+    // New shift: optionally prefill from initialStart/initialEnd if provided
+    const start = props.initialStart ?? null
+    const end = props.initialEnd ?? null
+
     formData.value = {
       employeeId: '',
-      startTime: '',
-      endTime: '',
+      startTime: start ? formatDateTimeLocal(start) : '',
+      endTime: end ? formatDateTimeLocal(end) : '',
       title: '',
       notes: ''
     }
@@ -229,7 +235,10 @@ onMounted(async () => {
   initializeForm()
 })
 
-watch(() => props.shift, () => {
-  initializeForm()
-})
+watch(
+  () => [props.shift, props.initialStart, props.initialEnd],
+  () => {
+    initializeForm()
+  }
+)
 </script>
